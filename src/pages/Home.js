@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import CoinForm from '../components/CoinForm'
+
 
 class Home extends Component {
+
   render() {
     return (
-      <div>Home component</div>
+      <div>
+        <CoinForm />
+      </div>
     );
   }
 }
