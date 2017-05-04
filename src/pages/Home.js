@@ -4,10 +4,14 @@ import CoinForm from '../components/CoinForm'
 
 class Home extends Component {
 
+  constructor(){
+    super()
+    this.state = {data: []}}
+
   render() {
     return (
       <div>
-        <CoinForm />
+        <CoinForm data={this.state.data}/>
       </div>
     );
   }
