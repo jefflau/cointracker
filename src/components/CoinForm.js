@@ -57,9 +57,7 @@ class Inputs extends Component {
       inputs: [{id: 0, addr: "test", currency: "ETH"}]}
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log("hi", prevState);
-  }
+
 
   updateCurrency(uid, currency){
   return x => {
@@ -119,6 +117,9 @@ class Inputs extends Component {
         <button onClick={() => this.setState({inputs: this.state.inputs})}>
         Remove pair
         </button>
+        <button onClick={() => this.props.updatePortfolio(this.state.inputs)}>
+      Launch missiles!
+        </button>
       </div>
     )
   }
@@ -128,7 +129,7 @@ class CoinForm extends Component {
 
   render() {
     return (
-      <Inputs monolith={monolith}/>
+      <Inputs monolith={monolith} updatePortfolio={this.props.updatePortfolio}/>
     );
   }
 }
