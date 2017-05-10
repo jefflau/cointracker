@@ -9,16 +9,14 @@ var initialData = {
   coins: ["ETH", "BTC"],
   addresses: [
     {
-      addr: "test", currency: "ETH"
-    },
-    {
-      addr: "testing", currency: "BTC"
+      addr: "", currency: "ETH"
     }
-  ]
+  ],
+  portfolio: []
 }
 
-const app = Redax.init(
-  initialData,
+const app = new Redax(
+  Immutable.fromJS(initialData),
   () => ReactDOM.render(<Main />, document.getElementById('root'))
 )
 

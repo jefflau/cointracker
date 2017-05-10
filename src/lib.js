@@ -1,18 +1,11 @@
-import Immutable from 'immutable'
-var Redax = {}
+export default class Redax {
+  constructor(data, render) {
+    this.db = data
+    this.render = render
 
-Redax.init = function(data, render){
-  this.db = Immutable.fromJS(data)
-  this.render = render;
-  return this;
+  }
+  update(newData){
+    this.db = newData;
+    this.render()
+  }
 }
-
-Redax.update = (newData) => {
-  this.db = newData
-  console.log('redax db', this.db.toJS())
-  this.render()
-}
-
-export default Redax
-
-export { Redax.update }

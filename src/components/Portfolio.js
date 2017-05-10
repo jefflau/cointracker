@@ -12,7 +12,7 @@ class Portfolio extends Component {
 
   updatePrices(){
     let promises1 = this.props.portfolio.map((item) => {
-      console.log(item.currency, item.addr)
+      //console.log(item.currency, item.addr)
       return API[`get${item.currency}Balance`](item.addr)
     })
     let promises2 = this.props.portfolio.map((item) => {

@@ -3,14 +3,14 @@ import 'whatwg-fetch'
 export function getETHBalance(address){
   return fetch(`https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=YourApiKeyToken`)
     .then(res => res.json())
-    .then(res => {console.log(res); return res} )
+    //.then(res => {console.log(res); return res} )
     .then(res => parseInt(res.result)/1000000000000000000)
 }
 
 export function getBTCBalance(address){
   return fetch(`https://blockchain.info/q/addressbalance/${address}?format=json&cors=true`)
     .then(res => res.json())
-    .then(res => {console.log(res); return res} )
+    //.then(res => {console.log(res); return res} )
     .then(res => parseInt(res)/100000000)
 }
 
