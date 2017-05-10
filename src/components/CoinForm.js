@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import refresh from '../index';
-import app from '../app';
+import app from '../App';
 
 var address = Immutable.fromJS({addr: "test", currency: "ETH"})
 

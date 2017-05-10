@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as API from '../api/api.js'
-import app from '../app'
+import app from '../App'
 
 
 class Portfolio extends Component {
