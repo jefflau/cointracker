@@ -1,137 +1,48 @@
-import React, { Component } from 'react';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Immutable from 'immutable';
+import refresh from '../index';
+import app from '../app';
+import { update } from '../lib'
 
-const monolith = {"coins": ["ETH", "BTC"]}
-
-class Input extends Component {
-    constructor(props){
-      super(props);
-      this.state = {value: 'coconut',
-                    text: ''};
-
-      this.handleChange = this.handleChange.bind(this);
-      this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-
-    }
-
-    handleChange(event) {
-    this.setState({value: event.target.value});
-    this.props.currencyChoose(this.props.uid, event.target.value)
-  }
-
-  handleTextChange(event){
-    this.setState({text: event.target.value})
-    this.props.addrChoose(this.props.uid, event.target.value)
-    console.log(event.target.value)
-  }
-
-  handleSubmit(event) {
-   alert('Your favorite flavor is: ' + this.state.value);
-   event.preventDefault();
- }
-
-  render () {
-    return (
-      <li >
-      <input type="text" placeholder={this.props.pairData.addr}
-             value={this.state.text} onChange={this.handleTextChange}/>
-      <select value={this.state.value} onChange={this.handleChange}>
-      {this.props.coins.map(x => (
-        <option value={x}>{x}</option>
-      ))}
-      </select>
-      <span onClick={x => this.props.delete(this.props.pairData.id)}>x</span>
-      <br/>
-      </li>
-    )
-  }
-}
+var address = Immutable.fromJS({addr: "test", currency: "ETH"})
 
 
-class Inputs extends Component {
+const input = (props, idx) =>
+    <li>
+       <input type="text"
+              placeholder="Enter address here"
+              value={props.get('addr')}
+              onChange={(e) => {
+                update(app.db.setIn(['addresses', idx, 'addr'], e.target.value))
+              }}/>
 
-  constructor(){
-    super()
-    this.state = {
-      keyId: 0,
-      inputs: [{id: 0, addr: "test", currency: "ETH"}]}
-  }
+       <select value={props.get('currency')}
+               onChange={
+                 (e) => {
+                   update(app.db.setIn(['addresses', idx, 'currency'], e.target.value))
+                 }
+               }>
+             {app.db.get('coins').map(x => <option value={x}>{x}</option>)}
+       </select>
 
+       <span onClick={() => {
+           update(app.db.updateIn(['addresses'], (x) => x.delete(idx)))
+         }
+       }>X</span>
+    </li>
 
-
-  updateCurrency(uid, currency){
-  return x => {
-      if (uid == x.id) {
-      x.currency = currency
-      return x;
-    }
-    else{
-      return x
-    }}}
-
-  currencyChoose(uid, curr){
-    this.setState({inputs: this.state.inputs.map(this.updateCurrency(uid, curr))})
-  }
-
-  updateAddr(uid, addr){
-  return x => {
-      if (uid == x.id) {
-      x.addr = addr
-      return x;
-    }
-    else{
-      return x
-    }}}
-
-  addrChoose(uid, addr){
-    this.setState({inputs: this.state.inputs.map(this.updateAddr(uid, addr))})
-  }
-
-  render() {
-    let {coins} = this.props.monolith
-    return (
-      <div>
+const Coinform = () =>{
+  console.log('COINFORM', app.db.toJS())
+  return <div>
       <ul>
-      {this.state.inputs.map(x => <Input key={x.id}
-                                         uid={x.id}
-                                         coins={coins}
-                                         pairData={x}
-                                         delete={id => this.setState({inputs:
-                                           this.state.inputs.filter(x => x.id != id)})}
-                                           currencyChoose={this.currencyChoose.bind(this)}
-                                           addrChoose={this.addrChoose.bind(this)}
-                                         />)}
+          {app.db.get('addresses').map(input)}
       </ul>
-        <button onClick={() => this.setState({
-            keyId: this.state.keyId + 1,
-            inputs: [
-              ...this.state.inputs, {
-                id: this.state.keyId + 1,
-                addr: "test",
-                currency: "ETH"
-              }]
-          })
-        }>
-        Add pair
-        </button>
-        <button onClick={() => this.setState({inputs: this.state.inputs})}>
-        Remove pair
-        </button>
-        <button onClick={() => this.props.updatePortfolio(this.state.inputs)}>
-      Launch missiles!
-        </button>
-      </div>
-    )
-  }
+      <button onClick={() => {
+        update(app.db.updateIn(['addresses'], (x) => x.push(address)));
+      }}>Grow a pair</button>
+  </div>
 }
 
-class CoinForm extends Component {
 
-  render() {
-    return (
-      <Inputs monolith={monolith} updatePortfolio={this.props.updatePortfolio}/>
-    );
-  }
-}
-
-export default CoinForm
+export default Coinform

@@ -1,17 +1,25 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Home from './pages/Home'
-import './api/api.js'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Immutable from 'immutable'
+import Main from './Main';
+import './index.css';
+import Redax from './lib';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Home />
-      </div>
-    );
-  }
+var initialData = {
+  coins: ["ETH", "BTC"],
+  addresses: [
+    {
+      addr: "test", currency: "ETH"
+    },
+    {
+      addr: "testing", currency: "BTC"
+    }
+  ]
 }
 
-export default App;
+const app = Redax.init(
+  initialData,
+  () => ReactDOM.render(<Main />, document.getElementById('root'))
+)
+
+export default app
