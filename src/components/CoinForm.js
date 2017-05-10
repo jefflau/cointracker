@@ -8,32 +8,31 @@ var address = Immutable.fromJS({addr: "test", currency: "ETH"})
 
 
 const input = (props, idx) =>
-    <li>
-       <input type="text"
-              placeholder="Enter address here"
-              value={props.get('addr')}
-              onChange={(e) => {
-                app.update(app.db.setIn(['addresses', idx, 'addr'], e.target.value))
-              }}/>
+  <li>
+     <input type="text"
+            placeholder="Enter address here"
+            value={props.get('addr')}
+            onChange={(e) => {
+              app.update(app.db.setIn(['addresses', idx, 'addr'], e.target.value))
+            }}/>
 
-       <select value={props.get('currency')}
-               onChange={
-                 (e) => {
-                   app.update(app.db.setIn(['addresses', idx, 'currency'], e.target.value))
-                 }
-               }>
-             {app.db.get('coins').map(x => <option value={x}>{x}</option>)}
-       </select>
+     <select value={props.get('currency')}
+             onChange={
+               (e) => {
+                 app.update(app.db.setIn(['addresses', idx, 'currency'], e.target.value))
+               }
+             }>
+           {app.db.get('coins').map(x => <option value={x}>{x}</option>)}
+     </select>
 
-       <span onClick={() => {
-           app.update(app.db.updateIn(['addresses'], (x) => x.delete(idx)))
-         }
-       }>X</span>
-    </li>
+     <span onClick={() => {
+         app.update(app.db.updateIn(['addresses'], (x) => x.delete(idx)))
+       }
+     }>X</span>
+  </li>
 
-const Coinform = () =>{
-  console.log(app.db.toJS())
-  return <div>
+const Coinform = () => (
+  <div>
       <ul>
           {app.db.get('addresses').map(input)}
       </ul>
@@ -44,18 +43,13 @@ const Coinform = () =>{
       <button onClick={() => {
         console.log('sdfdsfsdfdsf', app.db.get('portfolio'))
         //console.log("hi there", app.db.update('portfolio').concat([0, 1]).toJS())
-        // app.update(app.db.updateIn(['portfolio'], (x) => x.concat(app.db.get('addresses'))));
-        //
-        // app.update(app.db.setIn(['addresses'], Immutable.fromJS([address])))
-        var db = app.db.toJS()
-       var obj = { ...db, portfolio: [...db.portfolio, ...db.addresses], addresses: [address] }
-        console.log("OBJECT",obj)
-
-        // app.update(app.db.update(Immutable.fromJS(obj)))
-        //clear addresses
+        app.update(
+          app.db.updateIn(['portfolio'], (x) => x.concat(app.db.get('addresses')))
+                .setIn(['addresses'], Immutable.fromJS([address]))
+        );
       }}>Submit Addresses</button>
   </div>
-}
+)
 
 
 export default Coinform

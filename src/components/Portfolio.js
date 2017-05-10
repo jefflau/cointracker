@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import * as API from '../api/api.js'
+import app from '../app'
 
 
 class Portfolio extends Component {
@@ -11,22 +12,23 @@ class Portfolio extends Component {
   }
 
   updatePrices(){
-    let promises1 = this.props.portfolio.map((item) => {
+    const db = app.db
+    let promises1 = db.get('portfolio').map((item) => {
       //console.log(item.currency, item.addr)
-      return API[`get${item.currency}Balance`](item.addr)
+      return API[`get${item.get('currency')}Balance`](item.get('addr'))
     })
-    let promises2 = this.props.portfolio.map((item) => {
-      return API[`getPrice`](item.currency)
+    let promises2 = db.get('portfolio').map((item) => {
+      return API[`getPrice`](item.get('currency'))
     })
 
     Promise.all(promises1)
       .then(results => {
-        return results.map((e, i) => ({...this.props.portfolio[i], balance: e}))
+        return results.map((e, i) => ({...db.getIn(['portfolio', i]), balance: e}))
       })
       .then(portfolio => {
         Promise.all(promises2).then(results => {
           this.setState({
-            portfolioList: results.map((e, i) => ({...portfolio[i], price: e}))
+            portfolioList: results.map((e, i) => ({...db.getIn(['portfolio', i]), price: e}))
           })
         })
       })
